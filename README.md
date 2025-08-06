@@ -29,15 +29,18 @@
 
 ### Admin Dashboard
 ![Admin Dashboard](screenshots/dashboard.png)
+
 *Comprehensive analytics and statistics overview*
 
 
 ### Document Upload
 ![Document Upload](screenshots/document-upload.png)
+
 *User-friendly drag-and-drop document management system*
 
 ### Quote Generation
 ![Quote Generation](screenshots/quote-generation.png)
+
 *Dynamic pricing calculations with comprehensive coverage details*
 
 ## 🌟 Features
