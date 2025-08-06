@@ -31,9 +31,6 @@
 ![Admin Dashboard](screenshots/dashboard.png)
 *Comprehensive analytics and statistics overview*
 
-### Insurance Partners
-![Insurance Partners](screenshots/insurance-partners.png)
-*Integration with 6+ major insurance providers*
 
 ### Document Upload
 ![Document Upload](screenshots/document-upload.png)
