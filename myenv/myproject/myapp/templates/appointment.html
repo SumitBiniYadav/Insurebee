@@ -1,0 +1,254 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Page Header Start -->
+<div
+class="container-fluid page-header py-5 mb-5 wow fadeIn"
+data-wow-delay="0.1s"
+>
+<div class="container py-5">
+  <h1 class="display-4 animated slideInDown mb-4">Appointment</h1>
+  <nav aria-label="breadcrumb animated slideInDown">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Pages</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Appointment
+      </li>
+    </ol>
+  </nav>
+</div>
+</div>
+<!-- Page Header End -->
+
+<!-- Appointment Section Start -->
+<div class="container py-5">
+  <div class="row g-5 align-items-center">
+    <div class="col-lg-5">
+      <div class="content-box animate__animated animate__fadeInLeft">
+        <span class="badge bg-primary rounded-pill px-3 py-2 mb-3">Premier Insurance</span>
+        <h2 class="fw-bold mb-4">Award-Winning Insurance Solutions</h2>
+        <p class="text-muted mb-4">
+          We provide tailored insurance solutions for both individuals and businesses, ensuring financial security and peace of mind. Our commitment is to deliver reliable coverage, seamless claims processing, and expert guidance every step of the way.
+        </p>
+        <div class="testimonial-card bg-light p-4 rounded-3 shadow-sm">
+          <div class="d-flex align-items-center">
+            <div>
+              <h5 class="mb-1">Need immediate assistance?</h5>
+              <p class="text-primary mb-0 fw-bold">+012 345 6789</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-lg rounded-4 animate__animated animate__fadeInRight">
+        <div class="card-body p-4 p-md-5">
+          <h3 class="card-title mb-4">Request a Quote</h3>
+          
+          <form method="post" action="">
+            {% csrf_token %}
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required>
+                  <label for="name">Full Name</label>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" required>
+                  <label for="email">Email Address</label>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Your Mobile" required>
+                  <label for="mobile">Phone Number</label>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <select class="form-select" id="service" name="service" required>
+                    <option value="" selected disabled>Select a service</option>
+                    <option value="Auto Insurance">Auto Insurance</option>
+                    <option value="Home Insurance">Home Insurance</option>
+                    <option value="Life Insurance">Life Insurance</option>
+                    <option value="Health Insurance">Health Insurance</option>
+                    <option value="Business Insurance">Business Insurance</option>
+                  </select>
+                  <label for="service">Insurance Type</label>
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea class="form-control" id="message" name="message" placeholder="Additional details" style="height: 120px"></textarea>
+                  <label for="message">Additional Details</label>
+                </div>
+              </div>
+              
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg px-5 py-3 rounded-pill">
+                  <i class="fas fa-paper-plane me-2"></i>Get Your Quote
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Appointment Section End -->
+
+<!-- Features Section -->
+<div class="container-fluid bg-light py-5 mt-5">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Why Choose Our Insurance</h2>
+      <p class="text-muted">Experience the difference with our premium services</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card border-0 bg-white h-100 text-center p-4 shadow-sm hover-lift">
+          <div class="icon-box mb-4 mx-auto">
+            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+          </div>
+          <h4>Comprehensive Coverage</h4>
+          <p class="text-muted">Protection for all aspects of your life and business with tailored solutions.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card border-0 bg-white h-100 text-center p-4 shadow-sm hover-lift">
+          <div class="icon-box mb-4 mx-auto">
+            <i class="fas fa-hands-helping fa-3x text-primary"></i>
+          </div>
+          <h4>Expert Assistance</h4>
+          <p class="text-muted">Our team of experienced advisors will guide you through every step.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card border-0 bg-white h-100 text-center p-4 shadow-sm hover-lift">
+          <div class="icon-box mb-4 mx-auto">
+            <i class="fas fa-file-invoice-dollar fa-3x text-primary"></i>
+          </div>
+          <h4>Fast Claims Process</h4>
+          <p class="text-muted">Hassle-free and quick claims settlement when you need it most.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Features Section End -->
+
+<style>
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  }
+  
+  .rounded-4 {
+    border-radius: 1rem;
+  }
+  
+  .shape-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-10px);
+  }
+  
+  .icon-box {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(58, 123, 213, 0.1);
+  }
+  
+  /* Animation classes */
+  .animate__animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+  }
+  
+  .animate__fadeIn {
+    animation-name: fadeIn;
+  }
+  
+  .animate__fadeInUp {
+    animation-name: fadeInUp;
+  }
+  
+  .animate__fadeInLeft {
+    animation-name: fadeInLeft;
+  }
+  
+  .animate__fadeInRight {
+    animation-name: fadeInRight;
+  }
+  
+  .animate__delay-1s {
+    animation-delay: 1s;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 30px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-30px, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translate3d(30px, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+</style>
+
+{% endblock %}

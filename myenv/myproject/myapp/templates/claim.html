@@ -1,0 +1,646 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File a Claim - Insurance Portal</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #f8fafc;
+            --text-color: #1e293b;
+            --light-gray: #e2e8f0;
+            --border-color: #cbd5e1;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            background-color: var(--light-gray);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        
+        .progress {
+            width: 33.33%;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .form-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .policies-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .policy-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .policy-card:hover {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+        
+        .policy-card.selected {
+            border: 2px solid var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .policy-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .policy-number {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .policy-type {
+            color: #64748b;
+        }
+        
+        .policy-details {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .upload-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .upload-box:hover {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+        
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: var(--secondary-color);
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        
+        .file-icon {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+        
+        .remove-file {
+            margin-left: auto;
+            color: var(--danger);
+            cursor: pointer;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8fafc;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-under-review {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+        
+        .status-approved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-completed {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .form-navigation {
+            display: none;
+        }
+        
+        .form-navigation.active {
+            display: block;
+        }
+        
+        /* Form validation */
+        .error-message {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        input.error, select.error, textarea.error {
+            border-color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>File a Claim</h1>
+            <p class="subtitle">Complete the form below to submit your insurance claim</p>
+            
+            <div class="progress-container">
+                <div class="steps">
+                    <span id="step1" class="step active">1. Select Policy</span>
+                    <span id="step2" class="step">2. Claim Details</span>
+                    <span id="step3" class="step">3. Documentation</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" id="progress-indicator"></div>
+                </div>
+            </div>
+        </header>
+        
+        <form id="claim-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Step 1: Select Policy -->
+            <section id="section-1" class="form-navigation active">
+                <div class="form-section">
+                    <h2>Select a Policy</h2>
+                    <p>Choose one of your available policies to file a claim against:</p>
+                    
+                    <div class="policies-container" id="policies-list">
+                        <!-- Sample Policy Cards -->
+                         {% for booking in bookings %}
+                        <div class="policy-card" data-policy-id="POL-{{ booking.id }}">
+                            <div class="policy-header">
+                                <span class="policy-number">Policy #POL-{{ booking.policy.policyNo }}</span>
+                                {% if booking.payment_status == 'completed' %}
+                                <span class="status-badge status-approved">Active</span>
+                                {% else %}
+                                <span class="status-badge status-under-review">Under Review</span>
+                                {% endif %}
+                            </div>
+                            <div class="policy-type">{{ booking.policy.policy_type }} Insurance - {{ booking.policy.provider }}</div>
+                            <div class="policy-details">
+                                <div>Coverage: ₹{{ booking.policy.coverage_amount|floatformat:2 }}</div>
+                                <div>Valid until: {{ booking.policy.coverage_end_date }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="error-message" id="policy-error" style="display: none;">
+                        Please select a policy to continue
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button type="button" class="btn btn-primary" id="next-to-step2">Continue</button>
+                </div>
+            </section>
+            
+            <!-- Step 2: Claim Details -->
+            <section id="section-2" class="form-navigation">
+                <div class="form-section">
+                    <h2>Claim Details</h2>
+                    <p>Please provide information about your claim:</p>
+                    
+                    <div class="form-group">
+                        <label for="claim-reason">Reason for Claim</label>
+                        <textarea id="claim-reason" name="claim_reason" rows="4" placeholder="Describe the reason for your claim in detail"></textarea>
+                        <div class="error-message" id="reason-error" style="display: none;">
+                            Please provide a reason for your claim
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="claim-amount">Claim Amount</label>
+                        <input type="number" id="claim-amount" name="claim_amount" placeholder="0.00" min="0" step="0.01">
+                        <div class="error-message" id="amount-error" style="display: none;">
+                            Please enter a valid claim amount
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" class="btn btn-outline" id="back-to-step1">Back</button>
+                    <button type="button" class="btn btn-primary" id="next-to-step3">Continue</button>
+                </div>
+            </section>
+            
+            <!-- Step 3: Documentation -->
+            <section id="section-3" class="form-navigation">
+                <div class="form-section">
+                    <h2>Supporting Documentation</h2>
+                    <p>Please upload any documents that support your claim (receipts, reports, etc.):</p>
+                    
+                    <div class="upload-box" id="upload-area">
+                        <div class="upload-icon">📁</div>
+                        <p>Drag and drop files here or click to upload</p>
+                        <p class="subtitle">Maximum file size: 10MB. Supported formats: PDF, JPG, PNG</p>
+                        <input type="file" id="document-upload" name="document" style="display: none;">
+                    </div>
+                    
+                    <div id="uploaded-files" style="display: none;">
+                        <div class="uploaded-file">
+                            <span class="file-icon">📄</span>
+                            <span class="file-name" id="file-name-display">document.pdf</span>
+                            <span class="remove-file" id="remove-file">✕</span>
+                        </div>
+                    </div>
+                    
+                    <div class="error-message" id="document-error" style="display: none;">
+                        Please upload at least one supporting document
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes (Optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any additional information you'd like to share"></textarea>
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" class="btn btn-outline" id="back-to-step2">Back</button>
+                    <button type="submit" class="btn btn-primary" id="submit-claim">Submit Claim</button>
+                </div>
+            </section>
+        </form>
+        
+        <!-- Success Message (Hidden by default) -->
+        <div id="success-message" style="display: none; text-align: center; padding: 2rem;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+            <h2>Claim Submitted Successfully!</h2>
+            <p>Your claim has been received and is now under review. You can track its status in your claims dashboard.</p>
+            <div style="margin-top: 2rem;">
+                <button class="btn btn-primary" id="go-to-dashboard">Go to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const policyCards = document.querySelectorAll('.policy-card');
+            const nextToStep2 = document.getElementById('next-to-step2');
+            const nextToStep3 = document.getElementById('next-to-step3');
+            const backToStep1 = document.getElementById('back-to-step1');
+            const backToStep2 = document.getElementById('back-to-step2');
+            const submitClaim = document.getElementById('submit-claim');
+            const section1 = document.getElementById('section-1');
+            const section2 = document.getElementById('section-2');
+            const section3 = document.getElementById('section-3');
+            const progressIndicator = document.getElementById('progress-indicator');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const uploadArea = document.getElementById('upload-area');
+            const documentUpload = document.getElementById('document-upload');
+            const uploadedFiles = document.getElementById('uploaded-files');
+            const removeFile = document.getElementById('remove-file');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const successMessage = document.getElementById('success-message');
+            const claimForm = document.getElementById('claim-form');
+            
+            // Form validation elements
+            const policyError = document.getElementById('policy-error');
+            const reasonError = document.getElementById('reason-error');
+            const amountError = document.getElementById('amount-error');
+            const documentError = document.getElementById('document-error');
+            
+            // Form data
+            let formData = {
+                selectedPolicy: null,
+                claimReason: '',
+                claimAmount: 0,
+                document: null,
+                notes: ''
+            };
+            
+            // Handle policy selection
+            policyCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    policyCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Update form data
+                    formData.selectedPolicy = this.dataset.policyId;
+                    
+                    // Hide error message if it was shown
+                    policyError.style.display = 'none';
+                });
+            });
+            
+            // Next button to step 2
+            nextToStep2.addEventListener('click', function() {
+                if (!formData.selectedPolicy) {
+                    policyError.style.display = 'block';
+                    return;
+                }
+                
+                section1.classList.remove('active');
+                section2.classList.add('active');
+                progressIndicator.style.width = '66.66%';
+                step1.classList.remove('active');
+                step2.classList.add('active');
+            });
+            
+            // Next button to step 3
+            nextToStep3.addEventListener('click', function() {
+                const claimReason = document.getElementById('claim-reason').value;
+                const claimAmount = document.getElementById('claim-amount').value;
+                
+                let isValid = true;
+                
+                if (!claimReason.trim()) {
+                    reasonError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    reasonError.style.display = 'none';
+                }
+                
+                if (!claimAmount || parseFloat(claimAmount) <= 0) {
+                    amountError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    amountError.style.display = 'none';
+                }
+                
+                if (!isValid) return;
+                
+                // Update form data
+                formData.claimReason = claimReason;
+                formData.claimAmount = parseFloat(claimAmount);
+                
+                section2.classList.remove('active');
+                section3.classList.add('active');
+                progressIndicator.style.width = '100%';
+                step2.classList.remove('active');
+                step3.classList.add('active');
+            });
+            
+            // Back button to step 1
+            backToStep1.addEventListener('click', function() {
+                section2.classList.remove('active');
+                section1.classList.add('active');
+                progressIndicator.style.width = '33.33%';
+                step2.classList.remove('active');
+                step1.classList.add('active');
+            });
+            
+            // Back button to step 2
+            backToStep2.addEventListener('click', function() {
+                section3.classList.remove('active');
+                section2.classList.add('active');
+                progressIndicator.style.width = '66.66%';
+                step3.classList.remove('active');
+                step2.classList.add('active');
+            });
+            
+            // File upload handling
+            uploadArea.addEventListener('click', function() {
+                documentUpload.click();
+            });
+            
+            documentUpload.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    formData.document = file;
+                    
+                    // Display file name
+                    fileNameDisplay.textContent = file.name;
+                    uploadedFiles.style.display = 'block';
+                    
+                    // Hide error message if it was shown
+                    documentError.style.display = 'none';
+                }
+            });
+            
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--primary-color)';
+                this.style.backgroundColor = '#f8fafc';
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = 'var(--border-color)';
+                this.style.backgroundColor = 'transparent';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--border-color)';
+                this.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    formData.document = file;
+                    
+                    // Display file name
+                    fileNameDisplay.textContent = file.name;
+                    uploadedFiles.style.display = 'block';
+                    
+                    // Hide error message if it was shown
+                    documentError.style.display = 'none';
+                }
+            });
+            
+            // Remove uploaded file
+            removeFile.addEventListener('click', function() {
+                uploadedFiles.style.display = 'none';
+                formData.document = null;
+                documentUpload.value = '';
+            });
+            
+            // Form submission
+            claimForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get additional notes
+                formData.notes = document.getElementById('notes').value;
+                
+                // Validate document upload
+                if (!formData.document) {
+                    documentError.style.display = 'block';
+                    return;
+                }
+                
+                // Prepare form data for POST
+                let djangoForm = new FormData();
+                djangoForm.append('booking_id', formData.selectedPolicy.replace('POL-', ''));
+                djangoForm.append('claim_reason', formData.claimReason);
+                djangoForm.append('claim_amount', formData.claimAmount);
+                djangoForm.append('notes', formData.notes);
+                djangoForm.append('document', formData.document);
+
+                // Add CSRF token
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                djangoForm.append('csrfmiddlewaretoken', csrfToken);
+
+
+                fetch("", {
+                    method: 'POST',
+                    body: djangoForm
+                })
+                .then(response => {
+                    if (response.ok) {
+                        claimForm.style.display = 'none';
+                        successMessage.style.display = 'block';
+                    } else {
+                        alert("Something went wrong!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error submitting form:", error);
+                });
+
+                
+                // For demonstration purposes, show success message
+                claimForm.style.display = 'none';
+                successMessage.style.display = 'block';
+            });
+            
+            // Go to dashboard button
+            document.getElementById('go-to-dashboard').addEventListener('click', function() {
+                // Redirect to dashboard or reset form for demo
+                window.location.href= "{% url 'profile' %}";
+            });
+        });
+    </script>
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,699 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureShield Insurance - Document Upload</title>
+    <style>
+        :root {
+            --primary-color: #1a5f7a;
+            --secondary-color: #57c5b6;
+            --accent-color: #159895;
+            --light-color: #f9f9f9;
+            --dark-color: #333;
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 30px 0;
+            padding: 30px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .success-message {
+            background-color: #e7f7ef;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+        
+        .policy-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+        
+        .upload-section {
+            margin-bottom: 30px;
+        }
+        
+        .upload-section h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .upload-section h2 i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .document-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+        
+        .document-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .document-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .document-title i {
+            margin-right: 8px;
+        }
+        
+        .required-badge {
+            background-color: #ff7675;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+        
+        .document-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--secondary-color);
+            background-color: #f9f9f9;
+        }
+        
+        .upload-area i {
+            font-size: 2.5rem;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+        
+        .upload-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .upload-hint {
+            color: #888;
+            font-size: 0.8rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 15px;
+            padding: 10px 0;
+        }
+        
+        .file-item {
+            background-color: #f1f8ff;
+            border: 1px solid #d1e7ff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .file-name {
+            display: flex;
+            align-items: center;
+        }
+        
+        .file-name i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .remove-file {
+            color: #e74c3c;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        
+        .actions {
+            text-align: right;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #134b63;
+        }
+        
+        .btn-outline {
+            border: 1px solid #ddd;
+            background-color: white;
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .btn-outline:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .upload-progress {
+            height: 4px;
+            width: 100%;
+            background-color: #eee;
+            margin-top: 15px;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .upload-progress-bar {
+            height: 100%;
+            background-color: var(--secondary-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .document-status {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        .status-pending {
+            color: #f39c12;
+        }
+        
+        .status-approved {
+            color: var(--success-color);
+        }
+        
+        .status-rejected {
+            color: var(--error-color);
+        }
+        
+        .document-status i {
+            margin-right: 5px;
+        }
+        
+        .help-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+        }
+        
+        .help-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+        }
+        
+        .faq-answer {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .mobile-notice {
+            display: none;
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-notice {
+                display: block;
+            }
+            
+            .document-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .document-status {
+                margin-top: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}    
+    <div class="container">
+        <div class="main-content">
+            <div class="success-message">
+                <strong>Congratulations on your new policy!</strong> Please complete your setup by uploading the required documents below.
+            </div>
+            
+            <div class="policy-info">
+                <h3>Policy Information</h3>
+                <p><strong>Policy Number:</strong> SSIN-{{ policy.policyNo }}</p>
+                <p><strong>Policy Type:</strong> {{ policy.provider }}</p>
+                <p><strong>Start Date:</strong> {{ policy.coverage_start_date }}</p>
+            </div>
+            
+            <h1>Document Upload</h1>
+            <p>Please upload all required documents to activate your insurance policy. Documents marked as 'Required' must be submitted to proceed.</p>
+            
+            <div class="mobile-notice">
+                <i class="fas fa-info-circle"></i> For the best experience, we recommend using a desktop or laptop computer to upload your documents.
+            </div>
+            
+            <div class="upload-section">
+                <h2><i class="fas fa-id-card"></i> Identity Verification</h2>
+                
+                <div class="document-card">
+                    <div class="document-header">
+                        <div class="document-title">
+                            <i class="fas fa-id-card"></i> Proof of Identity
+                            <span class="required-badge">Required</span>
+                        </div>
+                        <div class="document-status status-pending">
+                            <i class="fas fa-clock"></i> Pending
+                        </div>
+                    </div>
+                    <div class="document-description">
+                        Please upload a valid government-issued photo ID (driver's license, passport, or national ID card).
+                    </div>
+                    <div class="upload-area" id="identity-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-label">Drag and drop files here or click to browse</div>
+                        <div class="upload-hint">Accepted formats: JPG, PNG, PDF (max 5MB)</div>
+                        <input type="file" class="file-input" name="identity" accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
+                    <div class="upload-progress" id="identity-progress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                    <div class="file-list" id="identity-file-list">
+                        <!-- Files will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="document-card">
+                    <div class="document-header">
+                        <div class="document-title">
+                            <i class="fas fa-home"></i> Proof of Address
+                            <span class="required-badge">Required</span>
+                        </div>
+                        <div class="document-status status-pending">
+                            <i class="fas fa-clock"></i> Pending
+                        </div>
+                    </div>
+                    <div class="document-description">
+                        Please upload a recent utility bill, bank statement, or any official document showing your current address (not older than 3 months).
+                    </div>
+                    <div class="upload-area" id="address-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-label">Drag and drop files here or click to browse</div>
+                        <div class="upload-hint">Accepted formats: JPG, PNG, PDF (max 5MB)</div>
+                        <input type="file" class="file-input" name="address" accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
+                    <div class="upload-progress" id="address-progress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                    <div class="file-list" id="address-file-list">
+                        <!-- Files will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <h2><i class="fas fa-file-invoice-dollar"></i> Financial Information</h2>
+                
+                <div class="document-card">
+                    <div class="document-header">
+                        <div class="document-title">
+                            <i class="fas fa-money-bill-wave"></i> Proof of Income
+                            <span class="required-badge">Required</span>
+                        </div>
+                        <div class="document-status status-pending">
+                            <i class="fas fa-clock"></i> Pending
+                        </div>
+                    </div>
+                    <div class="document-description">
+                        Please upload your most recent pay stub, tax return, or any official document showing your income.
+                    </div>
+                    <div class="upload-area" id="income-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-label">Drag and drop files here or click to browse</div>
+                        <div class="upload-hint">Accepted formats: JPG, PNG, PDF (max 5MB)</div>
+                        <input type="file" class="file-input" name="income" accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
+                    <div class="upload-progress" id="income-progress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                    <div class="file-list" id="income-file-list">
+                        <!-- Files will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <h2><i class="fas fa-heartbeat"></i> Health Information</h2>
+                
+                <div class="document-card">
+                    <div class="document-header">
+                        <div class="document-title">
+                            <i class="fas fa-file-medical"></i> Medical History
+                            <span class="required-badge">Required</span>
+                        </div>
+                        <div class="document-status status-pending">
+                            <i class="fas fa-clock"></i> Pending
+                        </div>
+                    </div>
+                    <div class="document-description">
+                        Please upload any recent medical records, lab results, or doctor's notes relevant to your health insurance application.
+                    </div>
+                    <div class="upload-area" id="medical-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-label">Drag and drop files here or click to browse</div>
+                        <div class="upload-hint">Accepted formats: JPG, PNG, PDF (max 10MB)</div>
+                        <input type="file" class="file-input" name="medical_history" accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
+                    <div class="upload-progress" id="medical-progress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                    <div class="file-list" id="medical-file-list">
+                        <!-- Files will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <h2><i class="fas fa-history"></i> Previous Insurance</h2>
+                
+                <div class="document-card">
+                    <div class="document-header">
+                        <div class="document-title">
+                            <i class="fas fa-file-contract"></i> Previous Insurance Information
+                        </div>
+                        <div class="document-status status-pending">
+                            <i class="fas fa-clock"></i> Pending
+                        </div>
+                    </div>
+                    <div class="document-description">
+                        If you had previous insurance coverage, please upload policy documents or proof of prior coverage (optional but recommended for continuity of coverage).
+                    </div>
+                    <div class="upload-area" id="insurance-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-label">Drag and drop files here or click to browse</div>
+                        <div class="upload-hint">Accepted formats: JPG, PNG, PDF (max 5MB)</div>
+                        <input type="file" class="file-input" name="prev_insurance" accept=".jpg,.jpeg,.png,.pdf">
+                    </div>
+                    <div class="upload-progress" id="insurance-progress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                    <div class="file-list" id="insurance-file-list">
+                        <!-- Files will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="help-section">
+                <h3>Document Upload Help</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What file formats are accepted?</div>
+                    <div class="faq-answer">We accept JPG, JPEG, PNG, and PDF files. Please ensure your documents are clear and all information is legible.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How long will document verification take?</div>
+                    <div class="faq-answer">Most documents are verified within 1-2 business days. You will receive an email notification once your documents are approved.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What if I don't have all the documents now?</div>
+                    <div class="faq-answer">You can save your progress and return later. However, your policy will only be activated once all required documents are submitted and approved.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Need assistance?</div>
+                    <div class="faq-answer">Contact our support team at support@secureshield.com or call 1-800-555-0123 during business hours.</div>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-outline">Save & Continue Later</button>
+                <button class="btn btn-primary">Submit Documents</button>
+            </div>
+        </div>
+    </div>
+    </form>
+    <script>
+        // Document upload functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                const input = area.querySelector('.file-input');
+                const fileListId = input.id.replace('-file', '-file-list');
+                const progressId = input.id.replace('-file', '-progress');
+                const fileList = document.getElementById(fileListId);
+                const progress = document.getElementById(progressId);
+                
+                // Click to browse files
+                area.addEventListener('click', () => {
+                    input.click();
+                });
+                
+                // Prevent default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                // Highlight drop area when dragging over it
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    area.addEventListener(eventName, highlight, false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, unhighlight, false);
+                });
+                
+                function highlight() {
+                    area.style.borderColor = '#57c5b6';
+                    area.style.backgroundColor = '#f0f9ff';
+                }
+                
+                function unhighlight() {
+                    area.style.borderColor = '#ddd';
+                    area.style.backgroundColor = '';
+                }
+                
+                // Handle dropped files
+                area.addEventListener('drop', handleDrop, false);
+                
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    handleFiles(files);
+                }
+                
+                // Handle selected files
+                input.addEventListener('change', function() {
+                    handleFiles(this.files);
+                });
+                
+                function handleFiles(files) {
+                    if (files.length > 0) {
+                        for (let i = 0; i < files.length; i++) {
+                            uploadFile(files[i]);
+                        }
+                    }
+                }
+                
+                function uploadFile(file) {
+                    // Show progress bar
+                    progress.style.display = 'block';
+                    const progressBar = progress.querySelector('.upload-progress-bar');
+                    
+                    // Simulate upload progress
+                    let width = 0;
+                    const interval = setInterval(() => {
+                        if (width >= 100) {
+                            clearInterval(interval);
+                            
+                            // Add file to list
+                            const fileItem = document.createElement('div');
+                            fileItem.className = 'file-item';
+                            
+                            const fileName = document.createElement('div');
+                            fileName.className = 'file-name';
+                            
+                            // Determine icon based on file type
+                            let icon = 'fa-file';
+                            if (file.type.includes('image')) {
+                                icon = 'fa-file-image';
+                            } else if (file.type.includes('pdf')) {
+                                icon = 'fa-file-pdf';
+                            }
+                            
+                            fileName.innerHTML = `<i class="fas ${icon}"></i> ${file.name}`;
+                            
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-file';
+                            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            removeBtn.addEventListener('click', function() {
+                                fileList.removeChild(fileItem);
+                            });
+                            
+                            fileItem.appendChild(fileName);
+                            fileItem.appendChild(removeBtn);
+                            fileList.appendChild(fileItem);
+                            
+                            // Hide progress after completion
+                            setTimeout(() => {
+                                progress.style.display = 'none';
+                                progressBar.style.width = '0%';
+                            }, 500);
+                        } else {
+                            width += Math.random() * 10;
+                            if (width > 100) width = 100;
+                            progressBar.style.width = width + '%';
+                        }
+                    }, 100);
+                }
+            });
+            
+            // Submit button functionality
+            const submitBtn = document.querySelector('.btn-primary');
+            submitBtn.addEventListener('click', function() {
+                // Check if all required documents are uploaded
+                const requiredSections = document.querySelectorAll('.required-badge');
+                let allUploaded = true;
+                
+                requiredSections.forEach(badge => {
+                    const card = badge.closest('.document-card');
+                    const fileList = card.querySelector('.file-list');
+                    
+                    if (fileList.children.length === 0) {
+                        allUploaded = false;
+                        card.style.borderColor = '#e74c3c';
+                        
+                        // Reset border after 2 seconds
+                        setTimeout(() => {
+                            card.style.borderColor = '#ddd';
+                        }, 2000);
+                    }
+                });
+                
+                if (allUploaded) {
+                    alert('All documents successfully submitted! Your policy will be activated once your documents are verified.');
+                } else {
+                    alert('Please upload all required documents to complete your submission.');
+                }
+            });
+        });
+    </script>
+</body>
+{% endblock %}
+</html>

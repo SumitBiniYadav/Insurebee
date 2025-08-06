@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Insurance Policy - InsureBee Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ffc107;
+            --primary-dark: #ffa000;
+            --text-dark: #333;
+            --light-gray: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            color: var(--text-dark);
+        }
+
+        .back-button {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--text-dark);
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        .back-button i {
+            margin-right: 5px;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px 12px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-cancel {
+            background-color: #f1f1f1;
+            color: #666;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e1e1e1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-dark);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--primary);
+        }
+
+        .file-upload-icon {
+            font-size: 32px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-text {
+            color: #666;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .preview-container {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .preview-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .datepicker::-webkit-calendar-picker-indicator {
+            color: rgba(0, 0, 0, 0);
+            opacity: 1;
+            display: block;
+            background: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23ffc107' d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z'/%3E%3C/svg%3E) no-repeat;
+            width: 16px;
+            height: 16px;
+            border-width: thin;
+            cursor: pointer;
+        }
+
+        /* Features section styles */
+        .features-container {
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background-color: var(--light-gray);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .remove-feature {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-feature-btn {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-gray);
+            border: 1px dashed #ccc;
+            color: var(--text-dark);
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .add-feature-btn:hover {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-color: var(--primary);
+        }
+
+        .add-feature-btn i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Add New Insurance Policy</h1>
+            <a href="{% url 'provider' %}" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div class="form-container">
+            <form id="add-policy-form" action="{% url 'addin' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-section">
+                    <h2 class="section-title">Provider Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="provider">Insurance Provider</label>
+                            <select id="provider" name="provider" class="form-select" required>
+                                <option value="">Select Provider</option>
+                                <option value="HDFC ERGO">HDFC ERGO</option>
+                                <option value="TATA AIG">TATA AIG</option>
+                                <option value="ICICI Lombard">ICICI Lombard</option>
+                                <option value="Bajaj Allianz">Bajaj Allianz</option>
+                                <option value="SBI General">SBI General</option>
+                                <option value="StarHealth">StarHealth</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="provider_logo">Provider Logo</label>
+                            <div class="file-upload">
+                                <label for="provider_logo" class="file-upload-label">
+                                    <div class="file-upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="file-upload-text">
+                                        Drag & drop or click to upload
+                                    </div>
+                                </label>
+                                <input type="file" id="provider_logo" name="providerim" accept="image/*">
+                            </div>
+                            <div id="preview-container" class="preview-container">
+                                <img id="preview-image" class="preview-image" src="#" alt="Preview">
+                                <div id="preview-name" class="preview-name"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Policy Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="policyNo">Policy Number</label>
+                            <input type="number" id="policyNo" name="policyNo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="policy_type">Policy Type</label>
+                            <select id="policy_type" name="policy_type" class="form-select" required>
+                                <option value="">Select Type</option>
+                                <option value="life">Life Insurance</option>
+                                <option value="health">Health Insurance</option>
+                                <option value="auto">Auto Insurance</option>
+                                <option value="home">Home Insurance</option>
+                                <option value="business">Business Insurance</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="coverage_amount">Coverage Amount (₹)</label>
+                            <input type="number" id="coverage_amount" name="coverage_amount" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="premium_amount">Premium Amount (₹)</label>
+                            <input type="number" id="premium_amount" name="premium_amount" class="form-control" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="duration">Duration (years)</label>
+                            <input type="number" id="duration" name="duration" class="form-control" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select id="status" name="status" class="form-select" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="expired">Expired</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="coverage_start_date">Coverage Start Date</label>
+                            <input type="date" id="coverage_start_date" name="coverage_start_date" class="form-control datepicker" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="coverage_end_date">Coverage End Date</label>
+                            <input type="date" id="coverage_end_date" name="coverage_end_date" class="form-control datepicker" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Policy Description</label>
+                        <textarea id="description" name="description" class="form-control" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Policy Features</h2>
+                    <p>Add key features of this insurance policy below.</p>
+                    
+                    <div id="features-container" class="features-container">
+                        <!-- Features will be added here dynamically -->
+                        <div class="feature-item" data-index="0">
+                            <button type="button" class="remove-feature" onclick="removeFeature(this)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="form-group">
+                                <label for="feature_title_0">Feature Title</label>
+                                <input type="text" id="feature_title_0" name="feature_title[]" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="feature_detail_0">Feature Details</label>
+                                <textarea id="feature_detail_0" name="feature_detail[]" class="form-control" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="add-feature-btn" class="add-feature-btn">
+                        <i class="fas fa-plus"></i> Add Another Feature
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Policy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Display file preview when selected
+        document.getElementById('provider_logo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    document.getElementById('preview-image').src = e.target.result;
+                    document.getElementById('preview-name').textContent = file.name;
+                    document.getElementById('preview-container').style.display = 'block';
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Auto-calculate end date based on start date and duration
+        document.getElementById('coverage_start_date').addEventListener('change', updateEndDate);
+        document.getElementById('duration').addEventListener('input', updateEndDate);
+
+        function updateEndDate() {
+            const startDateInput = document.getElementById('coverage_start_date');
+            const durationInput = document.getElementById('duration');
+            const endDateInput = document.getElementById('coverage_end_date');
+            
+            if (startDateInput.value && durationInput.value) {
+                const startDate = new Date(startDateInput.value);
+                const duration = parseInt(durationInput.value);
+                
+                if (!isNaN(startDate.getTime()) && !isNaN(duration)) {
+                    const endDate = new Date(startDate);
+                    endDate.setFullYear(endDate.getFullYear() + duration);
+                    
+                    // Format date as YYYY-MM-DD for the input
+                    const endDateStr = endDate.toISOString().split('T')[0];
+                    endDateInput.value = endDateStr;
+                }
+            }
+        }
+
+        // Features management
+        let featureIndex = 1;
+
+        document.getElementById('add-feature-btn').addEventListener('click', function() {
+            const featuresContainer = document.getElementById('features-container');
+            
+            const featureItem = document.createElement('div');
+            featureItem.className = 'feature-item';
+            featureItem.dataset.index = featureIndex;
+            
+            featureItem.innerHTML = `
+                <button type="button" class="remove-feature" onclick="removeFeature(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="form-group">
+                    <label for="feature_title_${featureIndex}">Feature Title</label>
+                    <input type="text" id="feature_title_${featureIndex}" name="feature_title[]" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="feature_detail_${featureIndex}">Feature Details</label>
+                    <textarea id="feature_detail_${featureIndex}" name="feature_detail[]" class="form-control" required></textarea>
+                </div>
+            `;
+            
+            featuresContainer.appendChild(featureItem);
+            featureIndex++;
+        });
+
+        function removeFeature(button) {
+            const featureItem = button.closest('.feature-item');
+            const featuresContainer = document.getElementById('features-container');
+            
+            // Don't remove if it's the only feature
+            if (featuresContainer.children.length > 1) {
+                featuresContainer.removeChild(featureItem);
+            } else {
+                // If it's the last one, just clear the fields
+                const titleInput = featureItem.querySelector('input[name="feature_title[]"]');
+                const detailInput = featureItem.querySelector('textarea[name="feature_detail[]"]');
+                
+                titleInput.value = '';
+                detailInput.value = '';
+            }
+        }
+
+        // Cancel button handler
+        document.querySelector('.btn-cancel').addEventListener('click', function() {
+            if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                window.location.href = '#dashboard';
+            }
+        });
+    </script>
+</body>
+</html>

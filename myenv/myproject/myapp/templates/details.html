@@ -1,0 +1,729 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsureBee - Prudent Life Term Insurance Details</title>
+  <style>
+    :root {
+      --primary: #12846e;
+      --secondary: #f5f7fa;
+      --text-dark: #2d3748;
+      --text-light: #4a5568;
+      --accent: #fbd38d;
+      --border: #e2e8f0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text-dark);
+      background-color: #f9fafb;
+    }
+    
+    header {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .logo img {
+      height: 40px;
+      margin-right: 0.5rem;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav ul li {
+      margin-left: 1.5rem;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    .user-actions {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-profile {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 1rem;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: #0d6d5a;
+    }
+    
+    .btn-outline {
+      background-color: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--secondary);
+    }
+    
+    .breadcrumb {
+      padding: 1rem 0;
+      font-size: 0.875rem;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-light);
+      text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--primary);
+    }
+    
+    .product-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    
+    .product-title {
+      margin: 0;
+    }
+    
+    .rating {
+      display: flex;
+      align-items: center;
+      color: #f6ad55;
+      margin: 0.5rem 0;
+    }
+    
+    .star {
+      color: #f6ad55;
+      margin-right: 0.25rem;
+    }
+    
+    .product-image {
+      width: 100%;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .product-details {
+      background-color: white;
+      border-radius: 0.5rem;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+    
+    .check-icon {
+      color: var(--primary);
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+    }
+    
+    .plan-card {
+      background-color: white;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 100px;
+    }
+    
+    .price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+    
+    .price .period {
+      font-size: 1rem;
+      color: var(--text-light);
+      font-weight: normal;
+    }
+    
+    .btn-large {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      font-size: 1rem;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    
+    .tab {
+      padding: 1rem 2rem;
+      cursor: pointer;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+    }
+    
+    .tab-content {
+      margin-bottom: 2rem;
+    }
+    
+    .coverage-detail {
+      margin-bottom: 1.5rem;
+    }
+    
+    .coverage-detail h4 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    
+    .faq-question {
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .similar-products {
+      margin: 3rem 0;
+    }
+    
+    .product-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .product-card {
+      background-color: white;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .product-card h3 {
+      margin-top: 0;
+    }
+    
+    footer {
+      background-color: var(--text-dark);
+      color: white;
+      padding: 3rem 0;
+      margin-top: 3rem;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    
+    .footer-logo {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links h3 {
+      margin-top: 0;
+    }
+    
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .footer-links a {
+      color: #cbd5e0;
+      text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #4a5568;
+      text-align: center;
+      color: #cbd5e0;
+      font-size: 0.875rem;
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .product-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .product-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'index' %}"> Home </a> > {{ policy.provider }}
+    </div>
+    
+    <div class="product-header">
+      <div>
+        <h1 class="product-title">{{ policy.provider }}</h1>
+        <div class="rating">
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">☆</span>
+          <span>4.2 (318 reviews)</span>
+        </div>
+      </div>
+      <div>
+        <span>PL</span>
+      </div>
+    </div>
+    
+    <div class="grid">
+      <div class="product-details">
+        <img src="{{ policy.providerim.url }}" alt="Prudent Life Term Insurance" class="product-image" />
+        
+        <div class="tabs">
+          <div class="tab active">Features</div>
+          <div class="tab">Coverage Details</div>
+          <div class="tab">FAQs</div>
+        </div>
+        
+        <div class="tab-content">
+          <h2>Key Features</h2>
+          {% for feature in policy.features.all %}
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>{{feature.title}}</strong>
+                <p>{{ feature.detail }}</p>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          
+          <h2>Product Description</h2>
+          
+          <p>With level premiums throughout the duration of your policy, you'll never have to worry about unexpected price increases. This predictability makes it easier to budget for your insurance needs while maintaining comprehensive coverage.</p>
+          
+          <p>One of the standout features of this policy is the option to convert to a permanent life insurance plan without requiring a new medical examination. This flexibility allows you to adapt your coverage as your needs change over time.</p>
+          
+          <p>The included Accelerated Death Benefit rider provides additional peace of mind, allowing you to access a portion of your death benefit should you be diagnosed with a terminal illness with a life expectancy of 12 months or less.</p>
+        </div>
+        
+        <div class="tab-content" style="display: none;">
+          <h2>Coverage Details</h2>
+          
+          <div class="coverage-detail">
+            <h4>Death Benefit</h4>
+            <p>The $250,000 death benefit is paid out to your designated beneficiaries upon your passing, as long as the policy is active and in good standing. This benefit is typically tax-free to the beneficiaries.</p>
+          </div>
+          
+          <div class="coverage-detail">
+            <h4>Term Length</h4>
+            <p>This policy provides coverage for 20 years from the issue date, as long as premiums are paid on time. At the end of the term, coverage will cease unless you choose to convert to a permanent policy or renew (renewal would be at increased rates based on your age at that time).</p>
+          </div>
+          
+          <div class="coverage-detail">
+            <h4>Premium Structure</h4>
+            <p>Your premium of $23 per month is guaranteed not to increase during the 20-year term. Premiums can be paid monthly, quarterly, semi-annually, or annually, with discounts available for annual payments.</p>
+          </div>
+          
+          <div class="coverage-detail">
+            <h4>Conversion Option</h4>
+            <p>You have the option to convert this term policy to a permanent life insurance policy offered by Prudent Life at any time during the first 15 years of the term, without providing evidence of insurability. Conversion will result in a new premium based on your age at conversion.</p>
+          </div>
+          
+          <div class="coverage-detail">
+            <h4>Accelerated Death Benefit</h4>
+            <p>If diagnosed with a terminal illness with a life expectancy of 12 months or less, you can access up to 50% of your death benefit (maximum $125,000) while still living. This advance is deducted from the final death benefit paid to beneficiaries.</p>
+          </div>
+          
+          <div class="coverage-detail">
+            <h4>Exclusions</h4>
+            <p>Death benefit may not be paid in cases of suicide within the first two years of the policy, material misrepresentation on the application, or in certain other circumstances as detailed in the policy documents.</p>
+          </div>
+        </div>
+        
+        <div class="tab-content" style="display: none;">
+          <h2>Frequently Asked Questions</h2>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>What happens after the 20-year term ends?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer" style="display: none;">
+              <p>At the end of your 20-year term, your coverage will expire. You will have several options: 1) Convert to a permanent life insurance policy (if done within the conversion period), 2) Apply for a new term policy (subject to new underwriting and higher premiums based on your current age), or 3) Let the coverage end.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>How quickly will the death benefit be paid?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer" style="display: none;">
+              <p>Once all required documentation is submitted, Prudent Life typically processes death benefit claims within 5-10 business days. The actual payment time can vary based on the complexity of the claim and the documentation provided.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Can I cancel my policy if I no longer need it?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer" style="display: none;">
+              <p>Yes, you can cancel your policy at any time by submitting a written request. If you cancel within the first 30 days (the free-look period), you'll receive a full refund of any premiums paid. After that period, you won't receive a refund of premiums paid, but no future premiums will be due.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Can I increase my coverage amount later?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer" style="display: none;">
+              <p>The death benefit amount cannot be increased on your existing policy. However, you can apply for an additional policy to increase your overall coverage. This would require a new application and underwriting process.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>How do I name or change my beneficiaries?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer" style="display: none;">
+              <p>You can name or change your beneficiaries at any time by submitting a Beneficiary Change Request form. This form can be downloaded from our website or requested from our customer service team. The change becomes effective once processed by Prudent Life.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="plan-card">
+        <h3>{{ policy.provider }}</h3>
+        <div class="rating">
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">☆</span>
+          <span>4.2</span>
+        </div>
+        
+        <div class="price">
+          ₹ {{ policy.premium_amount }} <span class="period">/month</span>
+        </div>
+        
+        <ul class="feature-list">
+          {% for feature in policy.features.all %}
+          <li class="feature-item">
+            <span class="check-icon">✓</span>
+            {{ feature.title }}
+          </li>
+          {% endfor %}
+        </ul>
+        
+        <a href="{% url 'quote' pk=policy.pk %}" class="btn btn-primary btn-large">Get Quote</a>
+        <a href="{% url 'call' pk=policy.pk %}" class="btn btn-outline btn-large" style="margin-top: 1rem;">Talk to an Agent</a>
+      </div>
+    </div>
+    
+    <div class="similar-products">
+      <h2>Similar Products</h2>
+      <div class="product-cards">
+        {% for policy in related_policy %}
+        <div class="product-card">
+          <span>BL</span>
+          <h3>{{ policy.provider }}</h3>
+          <div class="rating">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">☆</span>
+            <span>4.0</span>
+          </div>
+          <ul class="feature-list">
+            {% for feature in policy.features.all|slice:":2" %}
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              {{ feature.title }}t
+            </li>
+            {% endfor %}
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              {{ policy.duration }} years
+            </li>
+          </ul>
+          <div class="price">{{ policy.premium_amount }} <span class="period">/month</span></div>
+          <a href="{% url 'life' %}" class="btn btn-outline">View Details</a>
+        </div>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </main>
+  
+  
+</body>
+<script>
+  // Simple tab functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = [
+      `<h2>Key Features</h2>
+      <ul class="feature-list">
+        <li class="feature-item">
+          <div class="check-icon">✓</div>
+          <div>
+            <strong>Level Premium Guarantee</strong>
+            <p>Your premium payment will remain the same throughout the entire term of your policy, providing financial predictability and making it easier to budget.</p>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="check-icon">✓</div>
+          <div>
+            <strong>Conversion Option</strong>
+            <p>Convert your term policy to a permanent life insurance plan without requiring a new medical examination, giving you flexibility as your needs change.</p>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="check-icon">✓</div>
+          <div>
+            <strong>Accelerated Death Benefit</strong>
+            <p>Access a portion of your death benefit if diagnosed with a terminal illness with a life expectancy of 12 months or less.</p>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="check-icon">✓</div>
+          <div>
+            <strong>Tax-Free Benefits</strong>
+            <p>Death benefits are generally paid tax-free to your designated beneficiaries, providing maximum financial support when they need it most.</p>
+          </div>
+        </li>
+      </ul>
+      
+      <h2>Product Description</h2>
+      <p>With level premiums throughout the duration of your policy, you'll never have to worry about unexpected price increases. This predictability makes it easier to budget for your insurance needs while maintaining comprehensive coverage.</p>
+      
+      <p>One of the standout features of this policy is the option to convert to a permanent life insurance plan without requiring a new medical examination. This flexibility allows you to adapt your coverage as your needs change over time.</p>
+      
+      <p>The included Accelerated Death Benefit rider provides additional peace of mind, allowing you to access a portion of your death benefit should you be diagnosed with a terminal illness with a life expectancy of 12 months or less.</p>`,
+      
+      `<h2>Coverage Details</h2>
+      {% for feature in policy.features.all %}
+      <div class="coverage-detail">
+        <h4>{{ feature.title }}</h4>
+        <p>{{ feature.detail }}</p>
+      </div>
+      {% endfor %}
+      
+      `,
+      
+      `<h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>What happens when my insurance policy term ends?</span>
+          <span class="expander">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>At the end of your policy term, your coverage will expire. You will have several options: 1) Renew the policy (subject to new premiums and terms), 2) Switch to a different policy (may require re-underwriting), or 3) Let the coverage end and discontinue any further payments.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How quickly will the insurance claim be processed?</span>
+          <span class="expander">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Once all required documentation is submitted, we typically process claims within 5-10 business days. The actual payment time may vary depending on the complexity of the claim and the documents provided.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Can I cancel my policy if I no longer need it?</span>
+          <span class="expander">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>Yes, you can cancel your policy at any time by submitting a written request. If you cancel within the first 30 days (the free-look period), you'll receive a full refund of any premiums paid. After that period, you won't receive a refund of premiums paid, but no future premiums will be due.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Can I increase my coverage amount later?</span>
+          <span class="expander">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>The death benefit amount cannot be increased on your existing policy. However, you can apply for an additional policy to increase your overall coverage. This would require a new application and underwriting process.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How do I name or change my beneficiaries?</span>
+          <span class="expander">+</span>
+        </div>
+        <div class="faq-answer" style="display: none;">
+          <p>You can name or change your beneficiaries at any time by submitting a Beneficiary Change Request form. This form can be downloaded from our website or requested from our customer service team. The change becomes effective once processed by Prudent Life.</p>
+        </div>
+      </div>`
+    ];
+    
+    const tabContent = document.querySelector('.tab-content');
+    
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Update tab content
+        tabContent.innerHTML = tabContents[index];
+        
+        // Add FAQ toggle functionality if on FAQ tab
+        if (index === 2) {
+          const faqQuestions = document.querySelectorAll('.faq-question');
+          faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+              const answer = question.nextElementSibling;
+              const expander = question.querySelector('.expander');
+              
+              if (answer.style.display === 'none') {
+                answer.style.display = 'block';
+                expander.textContent = '−';
+              } else {
+                answer.style.display = 'none';
+                expander.textContent = '+';
+              }
+            });
+          });
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}
+</html>

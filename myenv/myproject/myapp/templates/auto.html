@@ -1,0 +1,952 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoShield - Compare & Buy Car Insurance Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #fb923c;
+            --accent: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #22c55e;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: #f9fafb;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 5px;
+            transition: var(--transition);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #1e3a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ea580c;
+            box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: #fff;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #2563eb);
+            color: #fff;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('/api/placeholder/1200/600');
+            background-size: cover;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            width: 50%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero .highlight {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .form-container {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            width: 45%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-icon {
+            background-color: rgba(30, 64, 175, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .form-subtitle {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #475569;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        .form-group i {
+            position: absolute;
+            right: 15px;
+            top: 45px;
+            color: #94a3b8;
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 1em;
+        }
+        
+        .features {
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .section-header {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2.4rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 35px;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+            transform-origin: left;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(30, 64, 175, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            font-size: 28px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover .feature-icon {
+            background-color: var(--primary);
+            color: #fff;
+        }
+        
+        .feature-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .partners {
+            padding: 80px 0;
+            background-color: #f1f5f9;
+        }
+        
+        .partner-logos {
+            display: flex;
+            justify-content: space-around; /* Changed from center to distribute evenly */
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px; /* Reduced from 40px */
+            margin-top: 50px;
+        }
+        
+        .partner-logo {
+            filter: grayscale(1);
+            opacity: 0.7;
+            transition: var(--transition);
+            max-width: 120px;
+            height: 60px; /* Fixed height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .partner-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Ensures the image fits within its container */
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
+        .benefits {
+            padding: 100px 0;
+            background-color: #fff;
+        }
+        
+        .benefits-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .benefits-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 35px;
+            padding: 25px;
+            background-color: #f8fafc;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .benefit-item:hover {
+            background-color: #fff;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(30, 64, 175, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 20px;
+            color: var(--primary);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .benefit-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .faq {
+            padding: 100px 0;
+            background-color: #f8fafc;
+        }
+        
+        .faq-container {
+            max-width: 900px;
+            margin: 50px auto 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+        }
+        
+        .faq-question {
+            padding: 20px 25px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+        
+        .faq-question::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .faq-question.active {
+            background-color: #f8fafc;
+        }
+        
+        .faq-question.active::after {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .faq-answer-inner {
+            padding: 20px 0;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--secondary), #f97316);
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('/api/placeholder/1200/600');
+            background-size: cover;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cta .btn {
+            background-color: #fff;
+            color: var(--secondary);
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .cta .btn:hover {
+            background-color: var(--primary);
+            color: #fff;
+        }
+        
+        footer {
+            background-color: #0f172a;
+            color: #fff;
+            padding: 80px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-heading {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: #f8fafc;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a i {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: #fff;
+            transform: translateX(5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+        
+        @media (max-width: 992px) {
+            .hero .flex {
+                flex-direction: column;
+            }
+            
+            .hero-content, .form-container {
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .hero-content {
+                margin-bottom: 40px;
+                text-align: center;
+            }
+            
+            .feature-card, .benefit-item {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .benefits-column {
+                width: 100%;
+            }
+            
+            .form-container {
+                padding: 30px;
+            }
+        }
+        
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <section class="hero">
+        <div class="container flex justify-between items-center">
+            <div class="hero-content">
+                <h1>Drive with Confidence, Insure with Excellence</h1>
+                <p>Find tailored car insurance that fits your needs and budget. Compare top insurers in just 2 minutes.</p>
+                <p>Save up to <span class="highlight">85%</span> on your premium!</p>
+                <a href="#" class="btn btn-secondary">Learn More</a>
+            </div>
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <div>
+                        <h3 class="form-title">Get Instant Quotes</h3>
+                        <p class="form-subtitle">Compare prices from top insurers</p>
+                    </div>
+                </div>
+                <form method ="POST" action="{% url 'auto' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="car-type">Car Type</label>
+                        <select id="car-type" class="form-control" name="car_type">
+                            <option value="">Select Car Type</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="hatchback">Hatchback</option>
+                            <option value="luxury">Luxury</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Your Email </label>
+                        <input type="email" placeholder="Email"  name="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="car-model">Car Make & Model</label>
+                        <input type="text" placeholder="Car Model"  name="model" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="registration">Registration Year</label>
+                        <input type="number" placeholder="Car Registration Year"  name="year" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-secondary" style="width: 100%;">View Best Prices</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose AutoShield?</h2>
+                <p class="section-subtitle">We make car insurance simple, affordable, and hassle-free with our innovative approach</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <h3 class="feature-title">Save Up To 85%</h3>
+                    <p>Compare quotes from multiple insurers to find the best rates tailored to your needs and driving history.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Quick & Easy</h3>
+                    <p>Get instant quotes in just 2 minutes with our streamlined process. No paperwork required!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Comprehensive Coverage</h3>
+                    <p>Find policies that protect against all types of damages and liabilities, giving you peace of mind.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Digital-First</h3>
+                    <p>Manage your policy, file claims, and get support - all through our intuitive mobile app and dashboard.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="partners">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Insurance Partners</h2>
+                <p class="section-subtitle">We work with the most trusted names in the industry to provide you with the best coverage options</p>
+            </div>
+            <div class="partner-logos">
+                <div class="partner-logo">
+                    <img src="{% static 'img/reliance.png' %}" alt="Insurance Co A">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/max.png' %}" alt="Insurance Co B">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/allianz.png' %}" alt="Insurance Co C">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/lombard.png' %}" alt="Insurance Co D">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/hdfc.png' %}" alt="Insurance Co E">
+                </div>
+            </div>
+            <div class="partner-logos" style="margin-top: 30px;">
+                <div class="partner-logo">
+                    <img src="{% static 'img/nippon.png' %}" alt="Insurance Co F">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/national.png' %}" alt="Insurance Co G">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/sbi.png' %}" alt="Insurance Co H">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/kotak.png' %}" alt="Insurance Co I">
+                </div>
+                <div class="partner-logo">
+                    <img src="{% static 'img/tata.png' %}" alt="Insurance Co J">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Benefits of Car Insurance with AutoShield</h2>
+                <p class="section-subtitle">Get peace of mind with our comprehensive car insurance plans designed for modern drivers</p>
+            </div>
+            <div class="benefits-container">
+                <div class="benefits-column">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>24/7 Roadside Assistance</h3>
+                            <p>Get help whenever and wherever you need it with our round-the-clock roadside assistance service.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Cashless Garage Network</h3>
+                            <p>Access our network of 5000+ garages for cashless repairs and servicing nationwide.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>No Claim Bonus</h3>
+                            <p>Enjoy discounts of up to 50% on your premium for claim-free years of driving.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="benefits-column">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Instant Policy Issuance</h3>
+                            <p>Get your policy documents instantly in your email after purchase with no waiting period.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Free Car Inspection</h3>
+                            <p>Schedule a free comprehensive car inspection with our expert technicians at your convenience.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Flexible Payment Options</h3>
+                            <p>Choose from multiple payment methods and flexible installment plans that fit your budget.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Find answers to common questions about car insurance and our services</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">What documents do I need to buy car insurance online?</div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            You'll need your car's registration certificate (RC), previous insurance policy (if any), and a valid driving license. All documents can be uploaded digitally through our platform for quick verification.
+                        </div>
+                        <div class="faq-answer-inner">
+                            You'll need your car's registration certificate (RC), previous insurance policy (if any), and a valid driving license. All documents can be uploaded digitally through our platform for quick verification.
+                        </div>
+                        <div class="faq-answer-inner">
+                            You'll need your car's registration certificate (RC), previous insurance policy (if any), and a valid driving license. All documents can be uploaded digitally through our platform for quick verification.
+                        </div>
+                        <div class="faq-answer-inner">
+                            You'll need your car's registration certificate (RC), previous insurance policy (if any), and a valid driving license. All documents can be uploaded digitally through our platform for quick verification.
+                        </div>
+                        <div class="faq-answer-inner">
+                            You'll need your car's registration certificate (RC), previous insurance policy (if any), and a valid driving license. All documents can be uploaded digitally through our platform for quick verification.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Get Started?</h2>
+                <p>Join thousands of satisfied customers and experience the AutoShield difference today!</p>
+                <a href="{% url 'appointment' %}" class="btn btn-secondary">Get Your Quote Now</a>
+            </div>
+        </div>
+    </section>
+
+    {% endblock %}

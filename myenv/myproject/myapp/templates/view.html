@@ -1,0 +1,792 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureBee - Policy Details</title>
+    <style>
+        :root {
+            --primary: #1976d2;
+            --primary-light: #e3f2fd;
+            --secondary: #f9a826;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --dark: #333;
+            --gray: #f5f5f5;
+            --light-gray: #fafafa;
+            --white: #ffffff;
+            --border: #e0e0e0;
+            --text: #333333;
+            --text-light: #757575;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1565c0;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .breadcrumb {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb span:last-child {
+            color: var(--text-light);
+        }
+        
+        .policy-header {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .policy-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .policy-title h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .badge-active {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-pending {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+        
+        .policy-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .policy-id {
+            font-family: monospace;
+            background-color: var(--light-gray);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--white);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: var(--light-gray);
+        }
+        
+        .tab-content {
+            background-color: var(--white);
+            border-radius: 0 0 8px 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .coverage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .coverage-item {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .coverage-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .coverage-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .coverage-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .coverage-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .coverage-value {
+            margin-top: 10px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .documents-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .document-item {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .document-item:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .document-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .document-info {
+            flex: 1;
+        }
+        
+        .document-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .document-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .action-icon {
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .action-icon:hover {
+            color: var(--primary);
+        }
+        
+        .summary-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .payment-history {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .payment-history th,
+        .payment-history td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .payment-history th {
+            background-color: var(--light-gray);
+            font-weight: 500;
+        }
+        
+        .payment-history tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .payment-history tr:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-paid {
+            background-color: var(--success);
+        }
+        
+        .status-pending {
+            background-color: var(--warning);
+        }
+        
+        .claims-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .claim-item {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .claim-info {
+            flex: 1;
+        }
+        
+        .claim-amount {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-left: 20px;
+        }
+        
+        .claim-status {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .contact-support {
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .support-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .support-info {
+            flex: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .policy-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .coverage-list,
+            .documents-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+                cursor: pointer;
+                font-size: 1.5rem;
+            }
+            
+            .policy-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .claim-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .claim-amount {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/profile/">Home</a>
+            <span>›</span>
+            <span>{{ booking.policy.provider }} - {{ booking.policy.policyNo }}</span>
+        </div>
+
+        <section class="policy-header">
+            <div class="policy-title">
+                <h1>{{ booking.policy.provider }} - {{ booking.policy.policyNo }}</h1>
+                {% if booking.is_active %}
+                <span class="badge badge-active">Active</span>
+                {% else %}
+                <span class="badge badge-pending">Inactive</span>
+                {% endif %}
+            </div>
+            <div class="policy-info">
+                <div class="info-item">
+                    <div class="info-label">Policy Number</div>
+                    <div class="info-value policy-id">{{ booking.policy.policyNo }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Coverage Period</div>
+                    <div class="info-value">{{ booking.policy.coverage_start_date}} - {{ booking.policy.coverage_end_date }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Premium Amount</div>
+                    <div class="info-value">₹{{ booking.policy.premium_amount }} / month</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Property Address</div>
+                    <div class="info-value">{{ user.address }}</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="coverage">Coverage Details</div>
+            {% comment %} <div class="tab" data-tab="documents">Documents</div> {% endcomment %}
+            <div class="tab" data-tab="payment">Payment History</div>
+            <div class="tab" data-tab="claims">Claims</div>
+            {% comment %} <div class="tab" data-tab="renewal">Renewal Information</div> {% endcomment %}
+        </div>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="coverage">
+                <h2>Coverage Details</h2>
+                <p>Your comprehensive home insurance policy provides protection against various risks.</p>
+                <div class="coverage-list">
+                    {% for feature in booking.policy.features.all %}
+                    <div class="coverage-item">
+                        <div class="coverage-icon">🧾</div>
+                        <h3 class="coverage-title">{{ feature.title }}</h3>
+                        <p class="coverage-desc">{{ feature.detail }}</p>
+                        
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% comment %} <div class="tab-pane" id="documents">
+                <h2>Policy Documents</h2>
+                <p>All your important insurance documents in one place.</p>
+                <div class="documents-list">
+                    <div class="document-item">
+                        <div class="document-icon">📄</div>
+                        <div class="document-info">
+                            <div class="document-name">Policy Certificate</div>
+                            <div class="document-date">Issued: May 15, 2024</div>
+                        </div>
+                        <span class="action-icon">⬇️</span>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">📝</div>
+                        <div class="document-info">
+                            <div class="document-name">Terms & Conditions</div>
+                            <div class="document-date">Updated: Jan 10, 2024</div>
+                        </div>
+                        <span class="action-icon">⬇️</span>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">🧾</div>
+                        <div class="document-info">
+                            <div class="document-name">Premium Receipt</div>
+                            <div class="document-date">Last payment: May 15, 2024</div>
+                        </div>
+                        <span class="action-icon">⬇️</span>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">📊</div>
+                        <div class="document-info">
+                            <div class="document-name">Property Valuation Report</div>
+                            <div class="document-date">Generated: Apr 30, 2024</div>
+                        </div>
+                        <span class="action-icon">⬇️</span>
+                    </div>
+                </div>
+                <div class="document-item">
+                    <div class="document-icon">📋</div>
+                    <div class="document-info">
+                        <div class="document-name">Required Documents for Renewal</div>
+                        <div class="document-date">Required by: Apr 30, 2025</div>
+                    </div>
+                    <span class="action-icon">⬇️</span>
+                </div>
+            </div> {% endcomment %}
+
+            <div class="tab-pane" id="payment">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <h3>Payment Summary</h3>
+                        {% if booking.payment_status == 'completed' %}
+                        <span class="badge badge-active">Paid</span>
+                        {% else %}
+                        <span class="badge badge-pending">Unpaid</span>
+                        {% endif %}
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Amount Paid:</div>
+                        <div class="info-value">₹{{ booking.amt_paid }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Payment Date:</div>
+                        <div class="info-value">{{ booking.booking_date }}</div>
+                    </div>
+                </div>
+
+                <table class="payment-history">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Transaction ID</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ booking.booking_date }}</td>
+                            <td>{{ booking.transaction_id }}</td>
+                            <td>₹{{ booking.amt_paid }}</td>
+                            <td><span class="status-indicator status-paid"></span> Paid</td>
+                        </tr>
+                        {% comment %} <tr>
+                            <td>May 15, 2023</td>
+                            <td>TXN987654321</td>
+                            <td>₹12,000</td>
+                            <td><span class="status-indicator status-paid"></span> Paid</td>
+                        </tr>
+                        <tr>
+                            <td>May 15, 2022</td>
+                            <td>TXN567891234</td>
+                            <td>₹11,800</td>
+                            <td><span class="status-indicator status-paid"></span> Paid</td>
+                        </tr> {% endcomment %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane" id="claims">
+                <h2>Claims History</h2>
+                <p>View and track your insurance claims.</p>
+                <div class="claims-list">
+                    {% for c in claim %}
+                    <div class="claim-item">
+                        <div class="claim-info">
+                            <h3>{{ c.booking.policy.provider }}</h3>
+                            <p>Claim ID: {{ c.id }}</p>
+                            <p>Filed on: {{ c.claim_date }}</p>
+                            <div class="claim-status">
+                                {% if c.status == 'approved' %}
+                                <span class="status-indicator status-paid"></span> Approved
+                                {% elif c.status == 'under_review' %}
+                                <span class="status-indicator status-pending"></span> Under Review
+                                {% elif c.status == 'rejected' %}
+                                <span class="status-indicator status-paid"></span> Rejected
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="claim-amount">₹{{ c.claim_amount }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+{% comment %} 
+            <div class="tab-pane" id="renewal">
+                <h2>Renewal Information</h2>
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <h3>Your Policy Requires Renewal</h3>
+                        <span class="badge badge-pending">Action Required</span>
+                    </div>
+                    <p>Your home insurance policy is up for renewal. Please review the updated terms and submit the required documents to ensure continuous coverage.</p>
+                    
+                    <div class="info-item" style="margin-top: 20px;">
+                        <div class="info-label">Renewal Deadline</div>
+                        <div class="info-value">May 14, 2025</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">New Premium Amount</div>
+                        <div class="info-value">₹13,200 / year</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Premium Change</div>
+                        <div class="info-value" style="color: #f44336;">+₹700 (5.6% increase)</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 15px 0;">Required Documents</h3>
+                <div class="documents-list">
+                    <div class="document-item">
+                        <div class="document-icon" style="color: #ff9800;">⚠️</div>
+                        <div class="document-info">
+                            <div class="document-name">Updated Property Photos</div>
+                            <div class="document-date">Required for renewal</div>
+                        </div>
+                        <span class="action-icon">⬆️</span>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon" style="color: #ff9800;">⚠️</div>
+                        <div class="document-info">
+                            <div class="document-name">List of Valuable Items</div>
+                            <div class="document-date">Required for renewal</div>
+                        </div>
+                        <span class="action-icon">⬆️</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline">Download Renewal Form</button>
+                    <button class="btn btn-primary">Complete Renewal</button>
+                </div>
+            </div> {% endcomment %}
+        </div>
+        
+        <div class="contact-support">
+            <div class="support-icon">💬</div>
+            <div class="support-info">
+                <h3>Need help with your policy?</h3>
+                <p>Our customer support team is available 24/7 to assist you with any questions.</p>
+            </div>
+            <button class="btn btn-outline" onclick="window.location.href='{% url 'contact' %}'">Contact Support</button>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab panes
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('active');
+                });
+                
+                // Show corresponding tab pane
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,467 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}InsureBee Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ffc107;
+            --primary-dark: #ffa000;
+            --secondary: #212121;
+            --light-gray: #f5f5f5;
+            --text-dark: #333;
+            --text-light: #fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--secondary);
+            color: var(--text-light);
+            transition: all 0.3s;
+        }
+        
+        .logo-container {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            margin-left: 10px;
+            color: var(--primary);
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-item.active {
+            background-color: var(--primary);
+            color: var(--text-dark);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title h1 {
+            font-size: 28px;
+            color: var(--text-dark);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-actions .notification {
+            position: relative;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-dark);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Loading Animation */
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .honeycomb {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+        
+        .honeycomb-cell {
+            position: absolute;
+            width: 40px;
+            height: 70px;
+            background-color: #FFC107;
+            border-radius: 8px;
+            transform: rotate(0deg);
+            opacity: 0.3;
+            transition: opacity 0.5s;
+        }
+        
+        .bee {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background-color: #FFC107;
+            border-radius: 40%;
+            overflow: hidden;
+            animation: flyAround 4s infinite;
+        }
+        
+        .bee:before, .bee:after {
+            content: "";
+            position: absolute;
+            display: block;
+        }
+        
+        .bee:before {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 20%, #000 20%, #000 30%, 
+                                       #FFC107 30%, #FFC107 45%, #000 45%, 
+                                       #000 55%, #FFC107 55%, #FFC107 70%, 
+                                       #000 70%, #000 80%, transparent 80%);
+        }
+        
+        .bee:after {
+            width: 4px;
+            height: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            right: -2px;
+            top: 5px;
+            border-radius: 2px;
+            animation: sting 0.5s infinite alternate;
+        }
+        
+        .bee-wing {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50% 50% 0 50%;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            animation: flap 0.2s infinite alternate;
+        }
+        
+        .loading-text {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .dot {
+            display: inline-block;
+            animation: dots 1.5s infinite;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .dot:nth-child(3) {
+            animation-delay: 1s;
+        }
+        
+        @keyframes flyAround {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(60px, -30px) scale(0.8);
+            }
+            50% {
+                transform: translate(30px, 40px) scale(1.1);
+            }
+            75% {
+                transform: translate(-50px, -10px) scale(0.9);
+            }
+        }
+        
+        @keyframes sting {
+            from { height: 10px; }
+            to { height: 12px; }
+        }
+        
+        @keyframes flap {
+            from { transform: translateX(-50%) rotate(45deg) scaleY(1); }
+            to { transform: translateX(-50%) rotate(45deg) scaleY(0.8); }
+        }
+        
+        @keyframes dots {
+            0%, 20% {
+                opacity: 0;
+            }
+            40% {
+                opacity: 1;
+            }
+            80%, 100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.3; }
+        }
+        
+        /* Additional styles for content pages */
+        {% block additional_styles %}{% endblock %}
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+        }
+        
+        .admin{
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: bold;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="">
+                        <img class="img-fluid" src="{% static 'img/icon/logoim3.png' %}" alt="InsureBee Logo" style="height: 40px; width: auto; margin-right: 10px;">
+                    </i>
+                    <h1>InsureBee</h1>
+                </div>
+            </div>
+            <div class="menu">
+                <div class="menu-item {% if active_page == 'dashboard' %}active{% endif %}" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item {% if active_page == 'providers' %}active{% endif %}" data-page="providers">
+                    <i class="fas fa-building"></i>
+                    <span>Insurance Providers</span>
+                </div>
+                <div class="menu-item {% if active_page == 'claims' %}active{% endif %}" data-page="claims">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Claims</span>
+                </div>
+                <div class="menu-item {% if active_page == 'customers' %}active{% endif %}" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </div>
+                <div class="menu-item {% if active_page == 'documents' %}active{% endif %}" data-page="documents">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Documents</span>
+                </div>
+                <div class="menu-item {% if active_page == 'transactions' %}active{% endif %}" data-page="transactions">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Transactions</span>
+                </div>
+                <div class="menu-item {% if active_page == 'settings' %}active{% endif %}" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">
+                    <h1>{% block page_title %}Welcome {{ user.name }}{% endblock %}</h1>
+                </div>
+                <div class="user-actions">
+                    <div class="notification">
+                        <a href="{% url 'noti' %}" >
+                        <i class="fas fa-bell" style="font-size: 20px;"></i>
+                        </a>
+                        <div class="notification-count">{{ activity_count }}</div>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <img src="{{ request.session.profile }}" style="width:40px;height:40px;border-radius:50%;">
+                        </div>
+                        <span><a href="{% url 'lprofile' %}" class="admin">Admin</a></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            {% block content %}
+            <!-- Content will be inserted here by child templates -->
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Loading Animation -->
+    <div class="loading-container" id="loading-screen">
+        <div class="honeycomb">
+            <div class="honeycomb-cell" style="top: 10px; left: 40px; transform: rotate(0deg);"></div>
+            <div class="honeycomb-cell" style="top: 40px; left: 10px; transform: rotate(60deg);"></div>
+            <div class="honeycomb-cell" style="top: 40px; left: 70px; transform: rotate(-60deg);"></div>
+            <div class="bee" id="bee">
+                <div class="bee-wing"></div>
+            </div>
+        </div>
+        <div class="loading-text">
+            InsureBee Loading
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+        </div>
+    </div>
+
+    <!-- Common Scripts -->
+    <script>
+        // Make the honeycomb cells pulse
+        const cells = document.querySelectorAll('.honeycomb-cell');
+        cells.forEach((cell, index) => {
+            cell.style.animation = `pulse 2s infinite ${index * 0.3}s`;
+        });
+        
+        // Handle menu item clicks
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                
+                // Show loading animation
+                document.getElementById('loading-screen').style.display = 'flex';
+                
+                // Redirect to appropriate page
+                if (page === 'dashboard') {
+                    setTimeout(() => window.location.href = "{% url 'lindex' %}", 500);
+                } else if (page === 'providers') {
+                    setTimeout(() => window.location.href = "{% url 'provider' %}", 500);
+                } else if (page === 'claims') {
+                    setTimeout(() => window.location.href = "{% url 'lclaims' %}", 500);
+                } else if (page === 'customers') {
+                    setTimeout(() => window.location.href = "{% url 'customers' %}", 500);
+                } else if (page === 'documents') {
+                    setTimeout(() => window.location.href = "{% url 'docverifi' %}", 500);
+                } else if (page === 'transactions') {
+                    setTimeout(() => window.location.href = "{% url 'transaction' %}", 500);
+                } else if (page === 'settings') {
+                    setTimeout(() => window.location.href = "{% url 'psettings' %}", 500);
+                }
+            });
+        });
+        
+        // Simulate initial loading when the page loads
+        window.addEventListener('load', function() {
+            document.getElementById('loading-screen').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 1000);
+        });
+        
+        // Add user profile click handler
+        document.querySelector('.user-profile').addEventListener('click', function() {
+            alert('User profile options will appear here');
+        });
+        
+        // Additional page-specific scripts
+        {% block additional_scripts %}{% endblock %}
+    </script>
+</body>
+</html>

@@ -1,0 +1,680 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance FAQ | GetInsured</title>
+    <style>
+        :root {
+            --primary-color: #2c5282;
+            --secondary-color: #3182ce;
+            --accent-color: #ebf8ff;
+            --text-color: #2d3748;
+            --light-text: #718096;
+            --background: #f7fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .search-box {
+            display: flex;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+        }
+        
+        .search-box button {
+            padding: 0 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .faq-section {
+            margin-bottom: 2rem;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s ease;
+        }
+        
+        .section-header:hover {
+            background-color: #234876;
+        }
+        
+        .section-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .section-content {
+            display: none;
+            padding: 0.5rem;
+        }
+        
+        .section-content.active {
+            display: block;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .faq-question {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .faq-answer {
+            display: none;
+            padding: 0 1.5rem 1rem 1.5rem;
+            color: var(--light-text);
+        }
+        
+        .faq-answer.active {
+            display: block;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .rotate {
+            transform: rotate(180deg);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+        
+        .contact-info {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        
+        .contact-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .contact-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .contact-button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .contact-button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .section-header {
+                font-size: 1.1rem;
+            }
+            
+            .faq-question {
+                padding: 0.75rem 1rem;
+            }
+            
+            .faq-answer {
+                padding: 0 1rem 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Insurance FAQ</h1>
+        <p>Find answers to all your insurance questions</p>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search your question here...">
+                <button>Search</button>
+            </div>
+        </div>
+        
+        <!-- General Insurance Questions -->
+        <div class="faq-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <span class="section-icon">📋</span>
+                    General Insurance Questions
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What does this insurance policy cover?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our insurance policies offer comprehensive coverage tailored to your specific needs. Coverage details vary by policy type but typically include protection against financial losses due to unexpected events. For specific coverage details about a particular policy, please review the policy document or speak with our insurance advisor.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What are the exclusions (things not covered) in this policy?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Common exclusions include intentional damage, wear and tear, pre-existing conditions (for health insurance), illegal activities, and certain high-risk activities. Each policy has specific exclusions listed in the policy document. We recommend carefully reviewing these exclusions before purchasing.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What is the premium amount and how often do I have to pay it?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Premium amounts vary based on coverage type, sum insured, your age, risk profile, and other factors. You can choose to pay premiums monthly, quarterly, semi-annually, or annually. Many policies offer discounts for annual payments. Use our premium calculator to get a personalized quote.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Is there any waiting period before the policy becomes active?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, most policies have waiting periods before certain benefits become active. For health insurance, this is typically 30 days for general conditions and 1-4 years for pre-existing conditions. Vehicle insurance usually becomes active after 24 hours. Life insurance may have a 15-30 day free-look period.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Can I cancel the policy anytime? If yes, what is the refund process?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, you can cancel your policy anytime. For cancellations during the free-look period (usually 15-30 days), you'll receive a full refund minus administrative fees. For later cancellations, refunds are calculated on a pro-rata basis for the unused period. Submit your cancellation request through our customer portal or contact our customer service.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        How can I file a claim, and what is the claim process?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        To file a claim: 1) Report the incident immediately through our mobile app, website, or by calling our claims hotline. 2) Fill out the claim form and submit required documents. 3) Our claims team will process your request and communicate via email/SMS. 4) Once approved, settlement is typically completed within 7-14 business days.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What documents are required for buying this policy and for claim settlement?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        For policy purchase: ID proof, address proof, age proof, and policy-specific documents (vehicle registration for auto insurance, medical reports for health insurance). For claims: Completed claim form, policy document, event-specific documents (medical reports, police FIR for accidents, death certificate for life claims), and bank details for direct transfer.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What is the claim settlement ratio of the company?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our company maintains a claim settlement ratio of over 98% for the past three consecutive years, which is among the highest in the industry. This demonstrates our commitment to customer service and fair claim settlements. Detailed year-wise settlement ratios are available in our annual financial reports accessible on our website.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Are there any tax benefits associated with this policy?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, several insurance policies offer tax benefits. Health insurance premiums are eligible for deduction under Section 80D (up to ₹25,000 for individuals, ₹50,000 for senior citizens). Life insurance premiums qualify for deduction under Section 80C (up to ₹1.5 lakh). Tax benefits are subject to changes in tax laws and individual tax situations.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Can I get a demo or consult an advisor before purchasing?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! We offer free virtual consultations with our licensed insurance advisors who can guide you through policy options based on your needs. You can also request a product demo through our website or mobile app. Schedule your free consultation by calling us at 1-800-XXX-XXXX or using the "Schedule Call" button on our website.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Health Insurance Specific Questions -->
+        <div class="faq-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <span class="section-icon">💉</span>
+                    Health Insurance Specific Questions
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Are pre-existing diseases covered? If yes, after how long?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, pre-existing diseases are covered after a waiting period that typically ranges from 2-4 years, depending on the condition and policy. Some premium plans may offer reduced waiting periods of 1-2 years. Certain chronic conditions might have specific terms and coverage limits. Declare all pre-existing conditions during application to avoid claim rejections.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Is there any sub-limit on room rent, ICU, or surgery?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        This depends on your selected plan. Basic plans typically have sub-limits such as 1% of sum insured for room rent and 2% for ICU charges. Premium plans may offer no sub-limits ("No Room Rent Capping"). Some plans have procedure-specific limits for certain surgeries. Check your policy document for specific sub-limits applicable to your plan.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What is the network of hospitals under this policy?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our health insurance plans provide access to over 7,500+ network hospitals nationwide. This includes major hospital chains and leading healthcare facilities. For cashless treatments, you must visit a network hospital. Use our website or mobile app to find nearby network hospitals. The list is regularly updated to ensure you have access to quality healthcare.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Does this plan cover maternity or newborn expenses?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Select health insurance plans offer maternity coverage after a waiting period of 2-4 years. This typically covers pre and post-natal expenses, delivery charges (normal and cesarean), and newborn coverage for the first 90 days. Coverage limits range from ₹25,000 to ₹1,00,000 depending on the plan. Specialized maternity plans with enhanced benefits are also available.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Are day-care procedures and OPD treatments covered?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, our comprehensive health plans cover over 150+ day-care procedures that don't require 24-hour hospitalization (like cataract surgery, dialysis, chemotherapy). Select premium plans also offer OPD (Outpatient Department) coverage including consultations, diagnostics, and pharmacy bills, usually with sub-limits of 5-10% of the sum insured per policy year.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What's the maximum sum insured I can get?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We offer sum insured options ranging from ₹3 lakhs to ₹1 crore. The maximum depends on factors like age, medical history, and income. For individuals under 45 years, sums up to ₹1 crore are available with minimal underwriting. For senior citizens, the maximum is typically ₹50 lakhs. Super top-up plans can further extend your coverage at an affordable cost.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Are preventive health checkups included?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, most of our health plans include annual preventive health checkups after the first policy year. Basic plans offer checkups worth ₹2,000-₹5,000, while premium plans offer comprehensive packages worth up to ₹10,000. These typically include blood tests, ECG, chest X-ray, and specialist consultations. The frequency may be annual or bi-annual depending on the plan.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Can I include family members in this policy?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! Our family floater plans allow you to cover your spouse, dependent children (up to age 25), and parents/parents-in-law under a single policy. You can choose floating sum insured options from ₹5 lakhs to ₹50 lakhs. Family discounts of 10-15% are available. For larger families, we recommend our Family Plus plan that covers up to 15 family members.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vehicle/Car Insurance Specific Questions -->
+        <div class="faq-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <span class="section-icon">🚗</span>
+                    Vehicle/Car Insurance Specific Questions
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What's the difference between third-party and comprehensive insurance?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Third-party insurance only covers damages to other people or their property caused by your vehicle (legally mandatory). Comprehensive insurance covers third-party liabilities PLUS damages to your own vehicle due to accidents, theft, fire, natural disasters, etc. While third-party is cheaper, comprehensive provides complete protection and is highly recommended despite costing 2-3 times more.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Does the policy cover accidents, theft, and natural calamities?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Comprehensive vehicle insurance covers all these scenarios. It provides protection against accidental damage, theft, fire, explosion, self-ignition, lightning, floods, earthquakes, landslides, rockslides, and other natural calamities. Third-party insurance, however, only covers damages to third parties and doesn't protect your vehicle against these risks.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What is IDV (Insured Declared Value) and how is it calculated?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        IDV (Insured Declared Value) is the maximum amount payable if your vehicle is stolen or suffers total loss. It's calculated as: Manufacturer's listed selling price - depreciation based on vehicle age. Depreciation rates: &lt;6 months: 5%, 6-12 months: 15%, 1-2 years: 20%, 2-3 years: 30%, 3-4 years: 40%, 4-5 years: 50%, &gt;5 years: negotiated value. Higher IDV means higher premium and vice versa.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Can I transfer my No Claim Bonus (NCB) to a new insurer?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, you can transfer your No Claim Bonus (NCB) to a new insurer or a new vehicle. NCB is a reward for claim-free years, offering discounts from 20% (after 1 claim-free year) up to 50% (after 5+ claim-free years). To transfer NCB, request an NCB certificate from your current insurer before policy expiry and submit it to the new insurer within 90 days.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        How many claims can I make in a year?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        There's no fixed limit on the number of claims you can make in a policy year, but each claim affects your No Claim Bonus (NCB). Even a single claim will reset your NCB to zero. For minor damages, consider paying out of pocket to preserve your NCB. Some premium plans offer "NCB Protect" add-on that allows one claim per year without affecting your NCB.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Is roadside assistance or zero depreciation included?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Base policies typically don't include these benefits, but they can be added as riders. Roadside assistance covers services like towing, battery jump-start, flat tire change, etc., costing ₹500-₹1,500/year. Zero depreciation (or bumper-to-bumper) coverage eliminates depreciation deductions during claims, costing 10-20% extra premium, but is highly recommended for new vehicles up to 5 years old.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Life Insurance Specific Questions -->
+        <div class="faq-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <span class="section-icon">👪</span>
+                    Life Insurance Specific Questions
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What is the term of the policy?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our life insurance policies offer flexible terms: Term plans range from 5-40 years or up to age 75-85. Whole life plans provide coverage until age 99-100. Endowment/ULIP plans typically offer 10-30 year terms. We recommend choosing a term that covers your productive years (typically until retirement) or matches specific financial goals like children's education or mortgage duration.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        How much sum assured should I choose?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        A general guideline is 10-15 times your annual income. Consider your financial obligations (loans, mortgage), future expenses (children's education), and income replacement needs. Our advisors recommend calculating based on the "Human Life Value" method that factors in your income, expenses, liabilities, inflation, and dependents. Use our online calculator for a personalized recommendation.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What happens if I miss a premium payment?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Most policies offer a grace period of 15-30 days during which you can pay without penalties. If payment isn't made within this period, the policy may lapse. For policies that have acquired surrender value (typically after 2-3 years), they become paid-up with reduced benefits. Lapsed policies can be revived within 2-5 years by paying outstanding premiums plus interest.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Will my nominee face any issues during claim settlement?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We ensure a hassle-free claim process with minimal documentation. To prevent issues: 1) Disclose all medical conditions during application, 2) Keep premiums up-to-date, 3) Inform nominees about the policy, 4) Keep policy documents accessible, 5) Update beneficiary details regularly. Claims are typically settled within 7 days for non-investigative cases if all documents are in order.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        What's the difference between term life, whole life, and endowment plans?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Term life provides pure protection for a specific period with no maturity benefits but offers the highest coverage at lowest cost. Whole life provides lifelong protection (typically until age 100) with savings component and some cash value. Endowment plans offer lower coverage but guaranteed returns at maturity, combining protection and savings with typically higher premiums than term plans.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Is there a maturity benefit if I survive the policy term?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        This depends on the policy type. Traditional term insurance has no maturity benefit. Return of Premium (TROP) plans return all premiums paid if you survive the term. Endowment/savings plans offer guaranteed maturity amounts plus bonuses. ULIPs provide fund value at maturity. Whole life plans typically pay the sum assured plus bonuses upon reaching a certain age (usually 100).
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Can I take a loan against this policy?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Loans are available against permanent life insurance policies (whole life, endowment, ULIPs) that have acquired surrender value, typically after 3 years. You can borrow up to 75-90% of the surrender value at interest rates usually 1-2% above the policy's guaranteed rate. Term insurance policies do not offer loan facilities as they don't accumulate cash value.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Digital/Online Insurance Queries -->
+        <div class="faq-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <span class="section-icon">📲</span>
+                    Digital/Online Insurance Queries
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Is buying insurance online safe and reliable?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, buying insurance online through our platform is completely safe and reliable. We use bank-grade 256-bit SSL encryption to protect your data. All online transactions are PCI-DSS compliant. Our digital policies have the same legal validity as physical policies. Additionally, online purchases often come with discounts as they eliminate agent commissions.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        Can I manage the policy online after purchase?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! Our customer portal and mobile app allow you to manage all aspects of your policy, including: viewing policy details, downloading documents, paying premiums, initiating claims, tracking claim status, updating personal information, adding or removing members (for health policies), requesting endorsements, and renewing policies. Register on our website using your policy number and date of birth.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(element) {
+            // Toggle the section content visibility
+            const content = element.nextElementSibling;
+            content.classList.toggle('active');
+            
+            // Rotate the arrow icon
+            const icon = element.querySelector('.toggle-icon');
+            icon.classList.toggle('rotate');
+        }
+        
+        function toggleAnswer(element) {
+            // Toggle the answer visibility
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('active');
+            
+            // Change the + to - and vice versa
+            const icon = element.querySelector('.toggle-icon');
+            if (icon.textContent === '+') {
+                icon.textContent = '-';
+            } else {
+                icon.textContent = '+';
+            }
+        }
+        
+        // Optional: Add search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    const questions = document.querySelectorAll('.faq-question');
+                    
+                    questions.forEach(function(question) {
+                        const text = question.textContent.toLowerCase();
+                        const item = question.closest('.faq-item');
+                        
+                        if (text.includes(query)) {
+                            item.style.display = '';
+                            // Optionally highlight matching sections
+                            if (query.length > 2) {
+                                const section = item.closest('.section-content');
+                                if (!section.classList.contains('active')) {
+                                    section.classList.add('active');
+                                    const header = section.previousElementSibling;
+                                    const icon = header.querySelector('.toggle-icon');
+                                    icon.classList.add('rotate');
+                                }
+                            }
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+
+    </script>
+                
+{% endblock%}

@@ -1,0 +1,305 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      body {
+          background-color: #f8f9fa;
+      }
+      
+      .navbar {
+          display: flex;
+          align-items: center;
+          padding: 15px 50px;
+          background-color: white;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      
+      .logo {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: #20315f;
+          font-weight: bold;
+          font-size: 24px;
+      }
+      
+      .logo img {
+          height: 40px;
+          margin-right: 10px;
+      }
+      
+      .nav-links {
+          margin-left: auto;
+          display: flex;
+          gap: 20px;
+      }
+      
+      .nav-links a {
+          text-decoration: none;
+          color: #666;
+          padding: 5px 10px;
+      }
+      
+      .sign-up-btn {
+          background-color: #0d6efd;
+          color: white;
+          padding: 8px 20px;
+          border-radius: 5px;
+          text-decoration: none;
+      }
+      
+      .container {
+          max-width: 600px;
+          margin: 50px auto;
+          padding: 30px;
+          border-radius: 10px;
+          background-color: white;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      }
+      
+      h1 {
+          text-align: center;
+          margin-bottom: 30px;
+          color: #20315f;
+          font-size: 32px;
+      }
+      
+      .form-group {
+          margin-bottom: 20px;
+      }
+      
+      input, textarea, select {
+          width: 100%;
+          padding: 12px 15px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          font-size: 16px;
+          transition: border-color 0.3s;
+      }
+      
+      input:focus, textarea:focus, select:focus {
+          outline: none;
+          border-color: #0d6efd;
+      }
+      
+      .row {
+          display: flex;
+          gap: 20px;
+      }
+      
+      .col-half {
+          width: 50%;
+      }
+      
+      textarea {
+          min-height: 100px;
+          resize: vertical;
+      }
+      
+      button {
+          background-color: #0d6efd;
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 500;
+          display: block;
+          margin: 0 auto;
+          transition: background-color 0.3s;
+      }
+      
+      button:hover {
+          background-color: #0b5ed7;
+      }
+      
+      .login-link {
+          text-align: center;
+          margin-top: 20px;
+      }
+      
+      .login-link a {
+          color: #0d6efd;
+          text-decoration: none;
+      }
+      
+      .login-link a:hover {
+          text-decoration: underline;
+      }
+      
+      .user-type-selector {
+          display: flex;
+          gap: 15px;
+          margin-bottom: 20px;
+      }
+      
+      .user-type-option {
+          flex: 1;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          padding: 15px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s;
+      }
+      
+      .user-type-option:hover {
+          border-color: #0d6efd;
+      }
+      
+      .user-type-option.selected {
+          background-color: #e7f1ff;
+          border-color: #0d6efd;
+      }
+      
+      .user-type-option i {
+          font-size: 24px;
+          margin-bottom: 10px;
+          color: #666;
+      }
+      
+      .user-type-option.selected i {
+          color: #0d6efd;
+      }
+      
+      @media (max-width: 768px) {
+          .row {
+              flex-direction: column;
+              gap: 10px;
+          }
+          
+          .col-half {
+              width: 100%;
+          }
+          
+          .navbar {
+              padding: 15px 20px;
+          }
+      }
+  </style>
+ 
+
+    <!-- Page Header Start -->
+    <div
+      class="container-fluid page-header py-5 mb-5 wow fadeIn"
+      data-wow-delay="0.1s"
+    >
+      <div class="container py-5">
+        <h1 class="display-4 animated slideInDown mb-4">Sign-Up</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+              Sign-Up
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <!-- Page Header End -->
+
+    <!-- Display error messages -->
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{error}}
+    </div>
+    {% endif %}
+
+    <!-- SignUp Form Start -->
+    <div class="container">
+      <h1>Create Your Account</h1>
+                <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">  
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Mobile"  name="mobile" required>
+                    </div>
+                    
+                    <!-- User Type Selection -->
+                    <div class="form-group">
+                        <label for="usertype">Select User Type:</label>
+                        <select name="usertype" id="usertype" required>
+                            <option value="" disabled selected>Choose user type</option>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Alternative Visual User Type Selection -->
+                    <!--
+                    <div class="form-group">
+                        <label>Select User Type:</label>
+                        <div class="user-type-selector">
+                            <div class="user-type-option" id="user-option" onclick="selectUserType('user')">
+                                <i class="fas fa-user"></i>
+                                <div>User</div>
+                            </div>
+                            <div class="user-type-option" id="admin-option" onclick="selectUserType('admin')">
+                                <i class="fas fa-user-shield"></i>
+                                <div>Admin</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="usertype" id="usertype-input" required>
+                    </div>
+                    -->
+                    
+                    <div class="form-group">
+                        <input type="password" placeholder="Your Password" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" placeholder="Confirm Password" name="cpassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="file" class="form-control" name="profile"> 
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Sign Up" class="btn btn-primary py-3 px-5 w-100">
+                    </div>
+                    
+                    <div class="login-link">
+                        <a href="{% url 'login' %}">Already have an Account</a>
+                    </div>
+                </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SignUp Form End -->
+
+    <!-- JavaScript for the alternative visual user type selection -->
+    <script>
+        function selectUserType(type) {
+            // Reset all options
+            document.getElementById('user-option').classList.remove('selected');
+            document.getElementById('admin-option').classList.remove('selected');
+            
+            // Select the clicked option
+            document.getElementById(type + '-option').classList.add('selected');
+            
+            // Set the hidden input value
+            document.getElementById('usertype-input').value = type;
+        }
+    </script>
+
+    {% endblock %}
+</html>

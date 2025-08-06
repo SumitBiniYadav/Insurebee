@@ -1,0 +1,267 @@
+{% extends "cheader.html" %}
+{% load static %}
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule a Call with an Insurance Expert</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .header h1 {
+            color: #2c5282;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input[type="text"], 
+        input[type="email"], 
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .date-time-section {
+            display: flex;
+            gap: 20px;
+        }
+        .date-time-section .form-group {
+            flex: 1;
+        }
+        .checkboxes label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .btn-submit {
+            background-color: #2c5282;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #1a365d;
+        }
+        .policy-summary {
+            background-color: #f2f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+        .policy-summary h3 {
+            margin-top: 0;
+            color: #2c5282;
+        }
+        .policy-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .benefits-section {
+            margin-bottom: 30px;
+        }
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .benefit-icon {
+            color: #2c5282;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        @media (max-width: 768px) {
+            .date-time-section {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Schedule a Call with an Insurance Expert</h1>
+            <p>Have questions about your quote? Our experts are here to help you make the right decision.</p>
+        </div>
+
+        <!-- Policy Quote Summary -->
+        <div class="policy-summary">
+            <h3>Your Quote Summary</h3>
+            <div class="policy-detail">
+                <span>Policy Name:</span>
+                <span id="policyType">{{ policy.provider }}</span>
+            </div>
+            <div class="policy-detail">
+                <span>Monthly Premium:</span>
+                <span id="premium">₹{{ policy.premium_amount }}</span>
+            </div>
+            <div class="policy-detail">
+                <span>Coverage Amount:</span>
+                <span id="coverage">₹{{ policy.coverage_amount }}</span>
+            </div>
+            <div class="policy-detail">
+                <span>Tenure:</span>
+                <span id="deductible">{{policy.duration}} Year ({{ policy.coverage_start_date }} to {{ policy.coverage_end_date }})</span>
+            </div>
+        </div>
+
+        <!-- Benefits of Speaking with an Expert -->
+        <div class="benefits-section">
+            <h3>Why Speak With Our Expert?</h3>
+            <div class="benefit-item">
+                <span class="benefit-icon">✓</span>
+                <span>Get personalized advice tailored to your specific needs</span>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">✓</span>
+                <span>Understand your coverage options and policy details</span>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">✓</span>
+                <span>Learn about discounts you may qualify for</span>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">✓</span>
+                <span>Have all your insurance questions answered by a professional</span>
+            </div>
+        </div>
+
+        <!-- Form Begin -->
+        <form id="expertCallForm" method="POST" action="{% url 'call' pk=policy.pk %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Contact Information -->
+            <h3>Your Contact Information</h3>
+            
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" value="{{user.name}}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{user.email}}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" value="{{user.mobile}}" required>
+            </div>
+            
+            <!-- Preferred Contact Method -->
+            <div class="form-group">
+                <label for="contactMethod">Preferred Contact Method</label>
+                <select id="contactMethod" name="contactMethod" required>
+                    <option value="">Select an option</option>
+                    <option value="phone call">Phone Call</option>
+                    <option value="video call">Video Call</option>
+                </select>
+            </div>
+
+            <!-- Schedule Information -->
+            <h3>Schedule Your Call</h3>
+            
+            <div class="date-time-section">
+                <div class="form-group">
+                    <label for="preferredDate">Preferred Date</label>
+                    <input type="date" id="preferredDate" name="preferredDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preferredTime">Preferred Time</label>
+                    <select id="preferredTime" name="preferredTime" required>
+                        <option value="">Select a time</option>
+                        <option value="9-12">9:00 AM - 12:00 PM</option>
+                        <option value="12-3">12:00 PM - 3:00 PM</option>
+                        <option value="3-6">3:00 PM - 6:00 PM</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="alternateDate">Alternate Date (Optional)</label>
+                <input type="date" id="alternateDate" name="alternateDate">
+            </div>
+            
+            <!-- Questions and Concerns -->
+            <h3>Your Questions or Concerns</h3>
+            
+            <div class="form-group">
+                <label for="questions">What specific questions do you have about your quote?</label>
+                <textarea id="questions" name="questions" placeholder="E.g., I'd like to understand more about the coverage limits, discounts available, etc."></textarea>
+            </div>
+            
+            <div class="form-group checkboxes">
+                <label>Topics you'd like to discuss: (Select all that apply)</label>
+                <label><input type="checkbox" name="topics" value="coverage"> Coverage details and limits</label>
+                <label><input type="checkbox" name="topics" value="premiums"> Premium and payment options</label>
+                <label><input type="checkbox" name="topics" value="claims"> Claims process</label>
+                <label><input type="checkbox" name="topics" value="discounts"> Available discounts</label>
+                <label><input type="checkbox" name="topics" value="comparison"> Compare with other policies</label>
+            </div>
+            
+            <!-- Consent Checkbox -->
+            <div class="form-group checkboxes">
+                <label><input type="checkbox" name="consent" required> I agree to be contacted by an insurance expert regarding my quote</label>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">Schedule My Call</button>
+        </form>
+    </div>
+</body>
+{% endblock %}
+</html>
