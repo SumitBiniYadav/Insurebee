@@ -132,8 +132,6 @@ Insurebee/
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- [List your prerequisites here]
 
 ### Installation
 
@@ -192,59 +190,8 @@ Insurebee/
 - Instant quote generation
 - Multiple payment options
 
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📞 Contact & Support
-
-**Business Hours**: Mon-Fri: 09 AM - 09 PM
-
-- 📧 **Email**: [insurebee@gmail.com](mailto:insurebee@gmail.com)
-- 📞 **Phone**: +012.345.6789
-- 🆘 **Customer Support**: 1-800-555-1234 (Monday-Friday: 8am-8pm, Saturday: 9am-5pm)
-- 🌐 **Website**: [InsureBee Platform](http://127.0.0.1:8000)
-
 ## 👨‍💻 Author
 
 **Sumit Bini Yadav**
 - GitHub: [@SumitBiniYadav](https://github.com/SumitBiniYadav)
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## 📝 Changelog
-
-### v1.0.0 - Initial Release
-- ✅ Dashboard analytics
-- ✅ Multi-provider integration
-- ✅ Document management system
-- ✅ Quote generation
-- ✅ User authentication system
-- ✅ Responsive web design
-
-## 🎯 Future Roadmap
-
-- [ ] Mobile app development
-- [ ] AI-powered risk assessment
-- [ ] Real-time chat support
-- [ ] Payment gateway integration
-- [ ] Advanced analytics dashboard
-- [ ] Multi-language support
-
----
-
-<p align="center">
-  <em>Built with ❤️ for adventure enthusiasts who believe in planning smart while living boldly.</em>
-</p>
-
-<p align="center">
-  <strong>Whether you're conquering mountains, diving off cliffs, or chasing your next adrenaline rush – we've got your back!</strong>
-</p>
