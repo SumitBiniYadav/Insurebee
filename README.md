@@ -159,11 +159,7 @@ Insurebee/
    # Add your start commands
    npm start
    ```
-
-5. **Access the application**
-   - **Local development**: http://127.0.0.1:8000
-   - **Login page**: http://127.0.0.1:8000/login/
-   - **Registration**: http://127.0.0.1:8000/signup/
+   
 
 ## 🎯 Core Functionalities
 
